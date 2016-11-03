@@ -28,6 +28,7 @@ Route::match(['get', 'post'], 'logout', 'Auth\LoginController@logout')->name('lo
 // ユーザー登録用のルート
 Route::get('register', function() {return view('auth.register');});
 Route::post('register', 'Auth\RegisterController@register');
+Route::get('register/{email}', 'Auth\RegisterController@resendActivationCode');
 
 // アクティベーション
 Route::get('activate/{email}/{code}', 'Sentinel\ActivateController@activate');

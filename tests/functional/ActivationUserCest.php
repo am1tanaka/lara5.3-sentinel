@@ -26,6 +26,20 @@ class ActivationUserCest
     // tests
     public function tryToTest(FunctionalTester $I)
     {
+        // アクティベーションの再送チェック
+        $I->expect('アクティベーションコードの再送');
+        $url = url('register', [base64_encode($this->cre['email'])]);
+        $I->amOnPage($url);
+        $I->seeInCurrentUrl('/login');
+        $I->see(trans('sentinel.after_register'));
+
+        // アクティベーションで無効なemail
+        $I->expect('無効なメールアドレスでの要求');
+        $url = url('register', [base64_encode('nobody@test.com')]);
+        $I->amOnPage($url);
+        $I->seeInCurrentUrl('/login');
+        $I->see(trans('sentinel.invalid_activation_params'));
+
         // コード違い
         $I->expect('アクティベーションコード違いエラー');
         $url = url('activate', [base64_encode($this->cre['email']), 'error']);
@@ -52,5 +66,12 @@ class ActivationUserCest
         $url = url('activate', [base64_encode('nobody@test.com'), 'no']);
         $I->amOnPage($url);
         $I->see(trans('sentinel.invalid_activation_params'), '.alert-danger');
+
+        // アクティベーションの再送チェック
+        $I->expect('アクティベーション済みに対する請求');
+        $url = url('register', [base64_encode($this->cre['email'])]);
+        $I->amOnPage($url);
+        $I->seeInCurrentUrl('/login');
+        $I->see(trans('sentinel.activation_done'));
     }
 }

@@ -50,6 +50,16 @@
                             </div>
                         </div>
 
+                        @if(isset($resend_code))
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <a class="btn btn-link" href="{{ url('register', base64_encode($resend_code))}}">
+                                    ユーザー登録を完了させるメールを再送
+                                </a>
+                            </div>
+                        </div>
+                        @endif
+
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4">
                                 <div class="checkbox">

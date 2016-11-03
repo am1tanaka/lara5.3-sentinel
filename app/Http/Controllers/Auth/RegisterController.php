@@ -63,4 +63,41 @@ class RegisterController extends Controller
         // メールを確認して、承認してからログインすることを表示するページへ
         return redirect($this->redirectTo)->with('info', trans('sentinel.after_register'));
     }
+
+    /**
+     * 指定のメールアドレスのアクティベーションコードを再送する
+     */
+    protected function resendActivationCode(Request $request) {
+        // 古いアクティベーションコードを削除
+        Activation::removeExpired();
+
+        // ユーザーを確認
+        $user = Sentinel::findByCredentials(['email' => base64_decode($request->email)]);
+        if (is_null($user)) {
+            return redirect('login')->with(['myerror' => trans('sentinel.invalid_activation_params')]);
+        }
+
+        // すでにアクティベート済みの時は、何もせずにログインへ
+        if (Activation::completed($user)) {
+            return redirect('login')->with(['info' => trans('sentinel.activation_done')]);
+        }
+
+        // アクティベーションの状況を確認
+        $exists = Activation::exists($user);
+        if (!$exists) {
+            // 存在しない場合は、再生成して、そのコードを送信する
+            $activation = Activation::create($user);
+        }
+        else {
+            // 現在のコードを
+            $activation = $exists;
+        }
+
+        // メールで送信する
+        $usermodel = User::where('email', $user->email)->get()[0];
+        $usermodel->notify(new RegisterNotify($activation->code));
+
+        // メールを確認して、承認してからログインすることを表示するページへ
+        return redirect('login')->with('info', trans('sentinel.after_register'));
+    }
 }
