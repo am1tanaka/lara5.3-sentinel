@@ -22,6 +22,9 @@ Route::get('login', function() {return view('auth.login', [
 ]);})->name('login');
 Route::post('login', 'Auth\LoginController@login');
 
+// ログアウト用のルート
+Route::match(['get', 'post'], 'logout', 'Auth\LoginController@logout')->name('logout');
+
 // ユーザー登録用のルート
 Route::get('register', function() {return view('auth.register');});
 Route::post('register', 'Auth\RegisterController@register');
