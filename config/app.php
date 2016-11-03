@@ -171,6 +171,7 @@ return [
           * Sentinel Service Providers...
           */
         Cartalyst\Sentinel\Laravel\SentinelServiceProvider::class,
+        Joshwhatk\Cent\CentServiceProvider::class,
 
         /*
          * Application Service Providers...
