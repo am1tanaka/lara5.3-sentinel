@@ -26,4 +26,7 @@ Route::post('login', 'Auth\LoginController@login');
 Route::get('register', function() {return view('auth.register');});
 Route::post('register', 'Auth\RegisterController@register');
 
+// アクティベーション
+Route::get('activate/{email}/{code}', 'Sentinel\ActivateController@activate');
+
 Route::get('/home', 'HomeController@index');
