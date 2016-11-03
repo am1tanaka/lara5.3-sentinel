@@ -1,7 +1,7 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "am1tanaka/lara5.3-sentinel",
+    "description": "Laravel+Sentinel User Authentication.",
+    "keywords": ["framework", "laravel", "sentinel"],
     "license": "MIT",
     "type": "project",
     "require": {
