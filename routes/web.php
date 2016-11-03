@@ -15,6 +15,15 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// ログイン用のルート
+Route::get('login', function() {return view('auth.login', [
+    'info' => session('info'),
+    'myerror' => session('myerror')
+]);})->name('login');
+Route::post('login', 'Auth\LoginController@login');
+
+// ユーザー登録用のルート
+Route::get('register', function() {return view('auth.register');});
+Route::post('register', 'Auth\RegisterController@register');
 
 Route::get('/home', 'HomeController@index');

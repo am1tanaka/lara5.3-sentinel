@@ -2,32 +2,24 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Activation;
+use Mail;
+use Sentinel;
 use App\User;
 use App\Http\Controllers\Controller;
+use App\Notifications\RegisterNotify;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Http\Request;
 
 class RegisterController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Register Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles the registration of new users as well as their
-    | validation and creation. By default this controller uses a trait to
-    | provide this functionality without requiring any additional code.
-    |
-    */
-
-    use RegistersUsers;
-
     /**
      * Where to redirect users after login / registration.
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = 'login';
 
     /**
      * Create a new controller instance.
@@ -40,32 +32,35 @@ class RegisterController extends Controller
     }
 
     /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
+     * ユーザー登録
      */
-    protected function validator(array $data)
+    protected function register(Request $request)
     {
-        return Validator::make($data, [
+        $this->validate($request, [
+            // nameは必須で、255文字まで
             'name' => 'required|max:255',
+            // emailは必須で、emailの形式で、255文字までで、usersテーブル内でユニーク
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            // passwordは必須で、6文字以上255文字以下で、確認欄と一致する必要がある
+            'password' => 'required|between:6,255|confirmed',
         ]);
-    }
 
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        // 情報に問題がなければ、ユーザー登録
+        $credentials = [
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => $request['password'],
+        ];
+        $user = Sentinel::register($credentials);
+
+        // アクティベーションを作成する
+        $activation = Activation::create($user);
+
+        // メールで送信する
+        $usermodel = User::where('email', $user->email)->get()[0];
+        $usermodel->notify(new RegisterNotify($activation->code));
+
+        // メールを確認して、承認してからログインすることを表示するページへ
+        return redirect($this->redirectTo)->with('info', trans('sentinel.after_register'));
     }
 }
