@@ -11,12 +11,18 @@ class LoginCest
         'email' => 'login@test.com',
         'password' => 'password'
     ];
+    // 管理者情報
+    private $admin = [
+        'name' => '管理者',
+        'email' => 'admin@email.com',
+        'password' => 'password2'
+    ];
 
     public function _before(FunctionalTester $I)
     {
         // ユーザーを登録
+        Sentinel::registerAndActivate($this->admin);
         Sentinel::registerAndActivate($this->cre);
-
     }
 
     public function _after(FunctionalTester $I)
@@ -41,6 +47,11 @@ class LoginCest
         $I->submitForm('#loginForm', $this->cre);
         $I->seeInCurrentUrl('/home');
 
+        // 管理者ではないことを確認
+        $I->expect('管理者じゃないテスト');
+        \PHPUnit_Framework_Assert::assertFalse(Sentinel::inRole("admin"));
+        \PHPUnit_Framework_Assert::assertFalse(Sentinel::inRole("moderator"));
+
         // POSTでログアウトテスト
         $I->expect('ログアウトのテスト');
         $I->amOnPage('/login');
@@ -51,5 +62,18 @@ class LoginCest
         // GETでログアウトテスト
         $I->amOnPage('/logout');
         $I->seeInCurrentUrl('/login');
+
+        // 管理者テスト
+        $I->expect('管理者テスト');
+        //// ログイン
+        $I->amOnPage('/login');
+        $I->submitForm('#loginForm', $this->admin);
+        //// ロールのチェック
+        \PHPUnit_Framework_Assert::assertTrue(Sentinel::inRole("admin"));
+        \PHPUnit_Framework_Assert::assertFalse(Sentinel::inRole("moderator"));
+
+        //// メニューチェック
+        $I->see('ユーザー管理');
+        $I->see('ロール管理');
     }
 }

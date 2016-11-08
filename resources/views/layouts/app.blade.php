@@ -42,8 +42,17 @@
 
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <!-- Left Side Of Navbar -->
+                    <!-- Left Side Of Navbar -->
                     <ul class="nav navbar-nav">
-                        &nbsp;
+                        <li><a href="{{ url('/home') }}">Home</a></li>
+                        @if (Sentinel::check())
+                            @if (Sentinel::inRole('admin'))
+                                <li><a href="{{ url('users')}}">ユーザー管理</a></li>
+                                <li><a href="{{ url('roles')}}">ロール管理</a></li>
+                            @elseif (Sentinel::inRole('moderator'))
+                                <li><a href="{{ url('users')}}">ユーザー管理</a></li>
+                            @endif
+                        @endif
                     </ul>
 
                     <!-- Right Side Of Navbar -->
