@@ -7,3 +7,10 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+// ページネーションの設定
+.pagination {
+    margin-left: auto;
+    margin-right: auto;
+    display: table;
+}

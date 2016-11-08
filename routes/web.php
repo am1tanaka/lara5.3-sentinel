@@ -38,4 +38,9 @@ Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail'
 Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm');
 Route::post('password/reset', 'Auth\ResetPasswordController@reset');
 
+// ユーザー管理関連
+Route::resource('users', 'Sentinel\UserController', ['except' => [
+    'create'
+]]);
+
 Route::get('/home', 'HomeController@index');
