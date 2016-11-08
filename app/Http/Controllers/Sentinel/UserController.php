@@ -19,13 +19,11 @@ class UserController extends Controller
                 'index'
             ]
         ]);
-        /*
         $this->middleware('permission:user.create', [
             'only' => [
                 'store'
             ]
         ]);
-        */
     }
 
     /**
@@ -62,7 +60,55 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // バリデーション
+        $this->validate($request, [
+            // nameは必須で、255文字まで
+            'name' => 'required|max:255',
+            // emailは必須で、emailの形式で、255文字までで、usersテーブル内でユニーク
+            'email' => 'required|email|max:255|unique:users',
+            // passwordは存在するのであれば、6文字以上255文字以下で、確認欄と一致する必要がある
+            'password' => 'between:6,255|confirmed'
+        ]);
+
+        // パスワードが無指定の場合は、自動生成する
+        $pass = $request->password;
+        if (empty($pass)) {
+            $pass = str_random(config('auth.password_generate_length'));
+        }
+
+        // DBに登録
+        $credentials = [
+            'name' => $request['name'],
+            'email' => $request['email'],
+            'password' => $pass,
+        ];
+        $user = Sentinel::registerAndActivate($credentials);
+
+        // ロールを設定する
+        $roles = [];
+        $rolename = "";
+        if (isset($request['user_new'])) {
+            $myrole = Sentinel::findRoleById($request['user_new']-0);
+            if ($myrole != null) {
+                $myrole->users()->attach($user);
+                $rolename = $myrole->name;
+            }
+        }
+
+        // メールで送信する
+        $user->notify(new \App\Notifications\UserEntryNotify([
+            'subject' => trans('sentinel.user_regist_subject'),
+            'blade' => 'sentinel.emails.user-regist-done',
+            'args' => [
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'password' => $pass,
+                'roles' => $rolename,
+            ]
+        ]));
+
+        // メールを確認して、承認してからログインすることを表示するページへ
+        return redirect('users')->with('info', trans('sentinel.user_regist_done'));
     }
 
     /**

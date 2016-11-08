@@ -5,18 +5,19 @@
     <div class="row">
         <div class="col-md-12">
 
+            @include('parts.info')
             @include('parts.errors')
 
             @if (Sentinel::check()->hasAccess('user.create'))
 
-            <form class="col" role="form" method="POST" action="{{url('users')}}">
+            <form id="storeUserForm" class="col" role="form" method="POST" action="{{url('users')}}">
                 {{ csrf_field() }}
 
                 <div class="panel panel-default">
                     <div class="panel-heading">ユーザー新規登録</div>
                     <div class="panel-body">
 
-                        @include('parts.entry-user')
+                        @include('parts.entry-user', ['no_password' => true])
 
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-4 help-block">

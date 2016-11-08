@@ -4,6 +4,7 @@
         <input type="radio"
             name="user_{{$userid}}"
             id="user_{{$userid}}_role_{{$rl->id}}"
+            value="{{$rl->id}}"
             @if ($user)
                 @if ($user->inRole($rl->slug))
                     checked="true"

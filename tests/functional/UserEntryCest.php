@@ -13,6 +13,10 @@ class UserEntryCest
             'name' => '一般ユーザー',
             'email' => 'user@test.com',
             'password'=>'password'
+        ],
+        [
+            'name' => '追加',
+            'email' => 'add@test.com'
         ]
     ];
 
@@ -49,8 +53,17 @@ class UserEntryCest
             'email' => $this->cres[0]['email'],
             'password' => $this->cres[0]['password']
         ]);
-        $I->amOnPage('/login');
-        $I->amOnPage('/users');
+        $I->click('ユーザー管理');
         $I->dontSee(trans('sentinel.permission_denied'), '.alert-danger');
+
+        $I->expect('ユーザー登録成功');
+        $moderator = Sentinel::findRoleBySlug('moderator');
+        $I->selectOption('form input[name=user_new]', $moderator->id);
+        $I->submitForm('#storeUserForm', $this->cres[2]);
+        $I->dontSee(trans('sentinel.permission_denied'), '.alert-danger');
+        $I->see(trans('sentinel.user_regist_done'));
+        \PHPUnit_Framework_Assert::assertNotNull(Sentinel::findByCredentials($this->cres[2]));
+
+        $I->amOnPage('/logout');
     }
 }
