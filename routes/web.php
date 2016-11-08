@@ -17,9 +17,8 @@ Route::get('/', function () {
 
 // ログイン用のルート
 Route::get('login', function() {return view('auth.login', [
-    'info' => session('info'),
-    'myerror' => session('myerror')
-]);})->name('login');
+    'info' => session('info')
+])->withErrors(session('myerror'));})->name('login');
 Route::post('login', 'Auth\LoginController@login');
 
 // ログアウト用のルート

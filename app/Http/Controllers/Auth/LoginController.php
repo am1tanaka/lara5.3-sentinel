@@ -47,16 +47,15 @@ class LoginController extends Controller
             ], $request['remember']);
         } catch (NotActivatedException $notactivated) {
             return view('auth.login', [
-                'myerror' => trans('sentinel.not_activation'),
-                'resend_code' => $request['email'],
-            ]);
+                'resend_code' => $request['email']
+            ])->withErrors([trans('sentinel.not_activation')]);
         } catch (ThrottlingException $throttling) {
-            return view('auth.login', ['myerror' => trans('sentinel.login_throttling')."[あと".$throttling->getDelay()."秒]"]);
+            return view('auth.login')->withErrors([trans('sentinel.login_throttling')."[あと".$throttling->getDelay()."秒]"]);
         }
 
         if (!$this->userInterface) {
             // エラー
-            return view('auth.login', ['myerror' => trans('sentinel.login_failed')]);
+            return view('auth.login')->withErrors([trans('sentinel.login_failed')]);
         }
 
         return redirect($this->redirectTo);

@@ -13,11 +13,8 @@
                         {{ $info }}
                     </div>
                     @endif
-                    @if(isset($myerror))
-                    <div class="alert alert-danger">
-                        {{ $myerror }}
-                    </div>
-                    @endif
+
+                    @include('parts.errors')
 
                     <form id="loginForm" class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
