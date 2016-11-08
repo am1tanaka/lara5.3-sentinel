@@ -14,12 +14,12 @@ class UserController extends Controller
      * 処理に権限チェックのミドルウェアを設定
      */
     public function __construct() {
-        /*
         $this->middleware('permission:user.view', [
             'only' => [
                 'index'
             ]
         ]);
+        /*
         $this->middleware('permission:user.create', [
             'only' => [
                 'store'

@@ -23,4 +23,6 @@ return [
     'reminder_title' => 'パスワードをリセットできます。',
     'password_reset_done' => 'パスワードをリセットしました。',
     'password_reset_failed' => 'リセットコードが古くなっていました。もう一度、リセットし直してください。',
+    // 権限関連
+    'permission_denied' => '権限がありません。',
 ];
