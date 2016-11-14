@@ -24,6 +24,11 @@ class UserController extends Controller
                 'store'
             ]
         ]);
+        $this->middleware('permission:user.update', [
+            'only' => [
+                'update'
+            ]
+        ]);
     }
 
     /**
