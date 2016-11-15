@@ -84,7 +84,7 @@
                                     </td>
                                     <td>
                                         <!-- Button trigger modal -->
-                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalUpdate-{{$user->id}}">
+                                        <button type="button" class="btn btn-primary" id="update_user_{{$user->id}}" data-toggle="modal" data-target="#modalUpdate-{{$user->id}}" v-on:click="updateUser($event,{{$user->id}})">
                                             <i class="fa fa-btn fa-refresh"></i>変更
                                         </button>
 
