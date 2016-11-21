@@ -65,8 +65,8 @@ if ($("#userList").length > 0) {
             },
             deleteUser: function(event, userid) {
                 this.showModal({
-                    title: "ユーザー ["+this.defaultValues['user_'+userid+'_name']+"] を削除しますか？",
-                    body: '',
+                    title: 'ユーザー削除',
+                    body: "ユーザー <b>["+this.defaultValues['user_'+userid+'_name']+"]</b> を削除しますか？",
                     method: 'DELETE',
                     action: '/users/'+userid
                 });
@@ -75,7 +75,7 @@ if ($("#userList").length > 0) {
                 var $userlist = $('#user-list-form');
 
                 // フォームデータを設定
-                $('#_method').val(params.action);
+                $('#_method').val(params.method);
                 $userlist.attr('action', $userlist.data('url')+params.action);
 
                 // モーダルの表示内容を設定
