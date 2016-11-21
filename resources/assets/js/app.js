@@ -25,13 +25,40 @@ if ($("#userList").length > 0) {
     const userList = new Vue({
         el: '#userList',
         data: {
-            defaultValues: []
+            defaultValues: [],
+            showModal: false
         },
         methods: {
+            escapeHTML: function(html) {
+                return $('<div>').text(html).html();
+            },
             updateUser: function(event, userid) {
-                alert(userid);
-                alert($(event.target).attr("id"));
                 // データの更新があるかをチェック
+                var changed = [];
+                var params = [
+                    ['ユーザー名', 'user_'+userid+'_name'],
+                    ['メールアドレス', 'user_'+userid+'_email'],
+                    ['ロール', 'user_'+userid+'_role']
+                ];
+
+                for (var i=0 ; i<3; i++) {
+                    if (this[params[i][1]] !== this.defaultValues[params[i][1]]) {
+                        changed[i] = '<td>'+params[i][0]+'</td><td>'
+                            +this.escapeHTML(this.defaultValues[params[i][1]])+'</td><td> -&gt;</td><td>'
+                            +this.escapeHTML(this[params[i][1]])+'</td>';
+                    }
+                }
+
+                if (changed.length == 0) {
+                    alert("変更点はありません。");
+                }
+                else {
+                    alert($('#user-update-form').attr('action'));
+
+                    $('#modal-body').html('<table class="table table-striped"><tr>'+changed.join('</tr><tr>')+'</tr></table>');
+                    // モーダルを表示
+                    $('#modal').modal('show');
+                }
             }
         },
         created: function() {
