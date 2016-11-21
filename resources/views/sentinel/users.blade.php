@@ -49,30 +49,29 @@
             {{ $users->links() }}
 
             <div id="userList">
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th>
-                                ユーザー名
-                            </th>
-                            <th>
-                                メールアドレス
-                            </th>
-                            <th>
-                                ロール
-                            </th>
-                            <th colspan='2'>
-                                操作
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($users as $user)
+                <form id='user-list-form' method="POST" data-url="{{ url('/') }}">
+                    {{ csrf_field() }}
+                    <input type="hidden" id="_method" name="_method" value="PUT">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
                             <tr>
-                                <form id='user-update-form' action="{{ url('users/'.$user->id) }}" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('PUT') }}
-
+                                <th>
+                                    ユーザー名
+                                </th>
+                                <th>
+                                    メールアドレス
+                                </th>
+                                <th>
+                                    ロール
+                                </th>
+                                <th colspan='2'>
+                                    操作
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($users as $user)
+                                <tr>
                                     <td>
                                         <input type="text" name="user_{{$user->id}}_name" id="user_{{$user->id}}_name" v-model="user_{{$user->id}}_name" data-default="{{$user->name}}" maxlength='255' size='20'>
                                     </td>
@@ -90,98 +89,48 @@
                                         <button type="button" class="btn btn-primary" id="update_user_{{$user->id}}" v-on:click="updateUser($event,{{$user->id}})">
                                             <i class="fa fa-btn fa-refresh"></i>変更
                                         </button>
-
-                                        <!-- 更新モーダル-->
-                                        <div class="modal fade" id="modalUpdate-{{$user->id}}" tabindex="-1" role="dialog">
-                                          <div class="modal-dialog">
-                                            <div class="modal-content">
-                                              <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                                <h4 class="modal-title">ユーザー情報を変更しますか？</h4>
-                                              </div>
-
-                                              <div class="modal-footer">
-                                                  <button type="submit" id="update-{{ $user->id }}" class="btn btn-primary">
-                                                      <i class="fa fa-btn fa-check"></i>  はい
-                                                  </button>
-                                                  <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                      <i class="fa fa-btn fa-close"></i>いいえ</button>
-
-                                              </div>
-                                            </div><!-- /.modal-content -->
-                                          </div><!-- /.modal-dialog -->
-                                        </div><!-- /.modal -->
                                     </td>
-                                </form>
+                                    <td>
+                                        <button type="button" class="btn btn-danger" v-on:click="deleteUser($event,{{$user->id}})">
+                                            <i class="fa fa-btn fa-trash"></i>削除
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
 
-                                <td>
-                                    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#modalDelete-{{$user->id}}">
-                                        <i class="fa fa-btn fa-trash"></i>削除
-                                    </button>
-                                    <!-- 削除モーダル-->
-                                    <div class="modal fade" id="modalDelete-{{$user->id}}" tabindex="-1" role="dialog">
-                                      <div class="modal-dialog">
-                                        <div class="modal-content">
-                                          <div class="modal-header">
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                            <h4 class="modal-title">指定のユーザーを削除しますか？</h4>
-                                          </div>
-                                          <div class="modal-body">
-                                              {{$user->name}} ： {{$user->email}}
-                                          </div>
-                                          <div class="modal-footer">
-                                              <form action="{{ url('users/'.$user->id) }}" method="POST">
-                                                  {{ csrf_field() }}
-                                                  {{ method_field('DELETE') }}
+                    <!-- 確認モーダル-->
+                    <div class="modal fade" id="modal" tabindex="-1" role="dialog">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 id="modal-title" class="modal-title"></h4>
+                          </div>
 
-                                                  <button type="submit" id="update-{{ $user->id }}" class="btn btn-primary">
-                                                      <i class="fa fa-btn fa-check"></i>  はい
-                                                  </button>
-                                                  <button type="button" class="btn btn-default" data-dismiss="modal">
-                                                      <i class="fa fa-btn fa-close"></i>いいえ</button>
-                                              </form>
+                          <div class="modal-body" id="modal-body">
+                          </div>
 
-                                          </div>
-                                        </div><!-- /.modal-content -->
-                                      </div><!-- /.modal-dialog -->
-                                    </div><!-- /.modal -->
+                          <div class="modal-footer">
+                              <button type="submit" id="modal-update" class="btn btn-primary">
+                                  <i class="fa fa-btn fa-check"></i>  はい
+                              </button>
+                              <button type="button" class="btn btn-default" data-dismiss="modal">
+                                  <i class="fa fa-btn fa-close"></i>いいえ</button>
 
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                          </div>
+                        </div><!-- /.modal-content -->
+                      </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+
+                </form>
             </div>
 
             {{ $users->links() }}
 
         </div>
     </div>
-
-    <!-- 更新モーダル-->
-    <div class="modal fade" id="modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-            <h4 class="modal-title">ユーザー情報を変更しますか？</h4>
-          </div>
-
-          <div class="modal-body" id="modal-body">
-          </div>
-
-          <div class="modal-footer">
-              <button type="submit" id="modal-update" class="btn btn-primary">
-                  <i class="fa fa-btn fa-check"></i>  はい
-              </button>
-              <button type="button" class="btn btn-default" data-dismiss="modal">
-                  <i class="fa fa-btn fa-close"></i>いいえ</button>
-
-          </div>
-        </div><!-- /.modal-content -->
-      </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
-
 </div>
 <input type="hidden" name="_method" value="">
 @endsection

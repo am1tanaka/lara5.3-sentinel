@@ -53,12 +53,36 @@ if ($("#userList").length > 0) {
                     alert("変更点はありません。");
                 }
                 else {
-                    alert($('#user-update-form').attr('action'));
-
-                    $('#modal-body').html('<table class="table table-striped"><tr>'+changed.join('</tr><tr>')+'</tr></table>');
-                    // モーダルを表示
-                    $('#modal').modal('show');
+                    // 実行時の動作を指定する
+                    var $userlist = $('#user-list-form');
+                    this.showModal({
+                        title: 'ユーザー情報を変更しますか？',
+                        body: '<table class="table table-striped"><tr>'+changed.join('</tr><tr>')+'</tr></table>',
+                        method: 'PUT',
+                        action: '/users/'+userid
+                    });
                 }
+            },
+            deleteUser: function(event, userid) {
+                this.showModal({
+                    title: "ユーザー ["+this.defaultValues['user_'+userid+'_name']+"] を削除しますか？",
+                    body: '',
+                    method: 'DELETE',
+                    action: '/users/'+userid
+                });
+            },
+            showModal: function(params) {
+                var $userlist = $('#user-list-form');
+
+                // フォームデータを設定
+                $('#_method').val(params.action);
+                $userlist.attr('action', $userlist.data('url')+params.action);
+
+                // モーダルの表示内容を設定
+                $('#modal-title').text(params.title);
+                $('#modal-body').html(params.body);
+                // モーダルを表示
+                $('#modal').modal('show');
             }
         },
         created: function() {
