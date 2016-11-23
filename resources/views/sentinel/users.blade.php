@@ -48,7 +48,7 @@
 
             {{ $users->links() }}
 
-            <div id="userList">
+            <div id="user-list">
                 <form id='user-list-form' method="POST" data-url="{{ url('/') }}">
                     {{ csrf_field() }}
                     <input type="hidden" id="_method" name="_method" value="PUT">
@@ -101,28 +101,7 @@
                     </table>
 
                     <!-- 確認モーダル-->
-                    <div class="modal fade" id="modal" tabindex="-1" role="dialog">
-                      <div class="modal-dialog">
-                        <div class="modal-content">
-                          <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 id="modal-title" class="modal-title"></h4>
-                          </div>
-
-                          <div class="modal-body" id="modal-body">
-                          </div>
-
-                          <div class="modal-footer">
-                              <button type="submit" id="modal-update" class="btn btn-primary">
-                                  <i class="fa fa-btn fa-check"></i>  はい
-                              </button>
-                              <button type="button" class="btn btn-default" data-dismiss="modal">
-                                  <i class="fa fa-btn fa-close"></i>いいえ</button>
-
-                          </div>
-                        </div><!-- /.modal-content -->
-                      </div><!-- /.modal-dialog -->
-                    </div><!-- /.modal -->
+                    <modal></modal>
 
                 </form>
             </div>
