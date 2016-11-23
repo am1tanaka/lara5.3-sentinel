@@ -1,5 +1,3 @@
-var webpack = require('webpack');
-
 module.exports = {
     el: '#user-list',
     data: {
