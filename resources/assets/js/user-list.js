@@ -1,4 +1,8 @@
-module.exports = {
+require('./bootstrap');
+
+Vue.component('modal', require('./components/Modal.vue'));
+
+var UserList = new Vue({
     el: '#user-list',
     data: {
         defaultValues: [],
@@ -88,4 +92,4 @@ module.exports = {
             }
         });
     }
-};
+});

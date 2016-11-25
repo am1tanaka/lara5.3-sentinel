@@ -111,5 +111,7 @@
         </div>
     </div>
 </div>
+<script type="text/javascript" src="./js/common-asset.js"></script>
+<script type="text/javascript" src="./js/userList.js"></script>
 <input type="hidden" name="_method" value="">
 @endsection
