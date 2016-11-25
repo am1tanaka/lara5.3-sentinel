@@ -10,11 +10,6 @@ module.exports = {
     output: {
         filename: '[name].js'
     },
-    module: {
-        loaders: [
-            { test: /\.vue$/, loader: 'vue' },
-        ]
-    },
     plugins: [
         new webpack.optimize.CommonsChunkPlugin({
             names: ['common-asset']
