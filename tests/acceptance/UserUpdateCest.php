@@ -13,16 +13,9 @@ class UserUpdateCest
 
     public function _before(AcceptanceTester $I)
     {
-        // テスト環境であることを確認する
-        if (DB::getDatabaseName() !== 'lara53_sentinel_test') {
-            $I->see('データベースがテスト用のものではないので、中止します。');
-        }
-
         // データベースを削除
-        DB::table('users')->truncate();
-        DB::table('roles')->truncate();
-        DB::table('role_users')->truncate();
-        DB::table('throttle')->truncate();
+        //// php artisan migrate:refresh
+        Artisan::call('migrate:refresh');
 
         // テスト環境の設定my
         $this->cres[0]['email'] = config('roles.admin_email');
