@@ -88,5 +88,7 @@
 
         @yield('content')
     </div>
+    <script type="text/javascript" src="./js/common-asset.js"></script>
+    @yield('scripts')
 </body>
 </html>
