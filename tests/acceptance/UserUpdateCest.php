@@ -14,10 +14,9 @@ class UserUpdateCest
     public function _before(AcceptanceTester $I)
     {
         // データベースを削除
-        //// php artisan migrate:refresh
         Artisan::call('migrate:refresh');
 
-        // テスト環境の設定my
+        // テスト環境の設定
         $this->cres[0]['email'] = config('roles.admin_email');
         $user = Sentinel::registerAndActivate($this->cres[0]);
         $this->userid = $user['id'];
