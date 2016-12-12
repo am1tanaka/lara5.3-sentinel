@@ -5,8 +5,7 @@ Vue.component('modal', require('./components/Modal.vue'));
 var UserList = new Vue({
     el: '#user-list',
     data: {
-        defaultValues: [],
-        showModal: false
+        defaultValues: []
     },
     methods: {
         escapeHTML: function(html) {

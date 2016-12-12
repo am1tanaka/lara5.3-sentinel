@@ -105,3 +105,7 @@
     </div>
 </div>
 @endsection
+
+@section('scripts')
+    <script type="text/javascript" src="./js/user-list.js"></script>
+@endsection
