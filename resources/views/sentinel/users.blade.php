@@ -5,6 +5,8 @@
     <div class="row">
         <div class="col-md-12">
 
+            @include('parts.errors')
+
             @if (Sentinel::check()->hasAccess('user.create'))
 
             <form id="storeUserForm" class="col" role="form" method="POST" action="{{url('users')}}">

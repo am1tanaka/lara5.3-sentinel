@@ -10,6 +10,18 @@ use Sentinel;
 class UserController extends Controller
 {
     /**
+     * コンストラクター
+     * 処理に権限チェックのミドルウェアを設定
+     */
+    public function __construct() {
+        $this->middleware('permission:user.view', [
+            'only' => [
+                'index'
+            ]
+        ]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
