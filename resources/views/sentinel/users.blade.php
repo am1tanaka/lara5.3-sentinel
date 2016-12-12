@@ -5,6 +5,7 @@
     <div class="row">
         <div class="col-md-12">
 
+            @include('parts.info')
             @include('parts.errors')
 
             @if (Sentinel::check()->hasAccess('user.create'))
