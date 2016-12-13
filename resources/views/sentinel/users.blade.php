@@ -69,7 +69,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($users as $user)
+                            @forelse($users as $user)
                                 <tr>
                                     <td>
                                         <input type="text" name="user_{{$user->id}}_name" id="user_{{$user->id}}_name" v-model="user_{{$user->id}}_name" data-default="{{$user->name}}" maxlength='255' size='20'>
@@ -87,12 +87,14 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-danger" v-on:click="deleteUser($event,{{$user->id}})">
+                                        <button type="button" class="btn btn-danger" id="delete_user_{{$user->id}}" v-on:click="deleteUser($event,{{$user->id}})">
                                             <i class="fa fa-btn fa-trash"></i>削除
                                         </button>
                                     </td>
                                 </tr>
-                            @endforeach
+                            @empty
+                                <tr><td colspan="4">登録したユーザーはいません。</td></tr>
+                            @endforelse
                         </tbody>
                     </table>
 

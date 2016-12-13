@@ -9,6 +9,11 @@ class UserUpdateCest
             'name' => 'テスト',
             'password' => 'password'
         ],
+        [
+            'name' => 'ユーザー',
+            'email' => 'a@email.com',
+            'password' => 'password'
+        ]
     ];
 
     public function _before(AcceptanceTester $I)
@@ -18,7 +23,10 @@ class UserUpdateCest
 
         // テスト環境の設定
         $this->cres[0]['email'] = config('roles.admin_email');
-        $user = Sentinel::registerAndActivate($this->cres[0]);
+        Sentinel::registerAndActivate($this->cres[0]);
+
+        // データ変更用のユーザーを追加
+        $user = Sentinel::registerAndActivate($this->cres[1]);
         $this->userid = $user['id'];
     }
 
@@ -46,11 +54,32 @@ class UserUpdateCest
         $I->fillField('#user_'.$this->userid.'_name', '名前変更');
         $I->click('#update_user_'.$this->userid);
         $I->waitForElementVisible('.modal-dialog', 10);
-
-        $I->wantTo('Click Change Button.');
         $I->click('はい');
 
-        $I->expect('Redirect users/{userid}');
-        $I->seeInCurrentUrl('/users/'.$this->userid);
+        $I->expect('Changed Name.');
+        $I->waitForText('名前変更', 10);
+
+        $I->wantTo('Change Email.');
+        $I->fillField('#user_'.$this->userid.'_email', 'b@email.com');
+        $I->click('#update_user_'.$this->userid);
+        $I->waitForElementVisible('.modal-dialog', 10);
+        $I->click('はい');
+        $I->expect('Changed Email.');
+        $I->waitForText('b@email.com', 10);
+
+        $I->wantTo('Change Role.');
+        $I->selectOption('form input[name=user_'.$this->userid.'_role]', 'Administrator');
+        $I->click('#update_user_'.$this->userid);
+        $I->waitForElementVisible('.modal-dialog', 10);
+        $I->click('はい');
+        $I->expect('Changed Role.');
+        $I->seeOptionIsSelected('form input[name=user_'.$this->userid.'_role]', 'Administrator');
+
+        $I->wantTo('Delete User.');
+        $I->click('#delete_user_'.$this->userid);
+        $I->waitForElementVisible('.modal-dialog', 10);
+        $I->click('はい');
+        $I->expect('See Deleted Message.');
+        $I->see(trans('sentinel.user_delete_done'));
     }
 }
