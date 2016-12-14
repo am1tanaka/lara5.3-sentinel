@@ -108,7 +108,7 @@ class UserController extends Controller
         // メールで送信する
         Sentinel::check()->notify(new \App\Notifications\UserEntryNotify([
             'subject' => trans('sentinel.user_regist_subject'),
-            'blade' => 'sentinel.emails.user-regist-done',
+            'blade' => 'sentinel.emails.user-registed',
             'args' => [
                 'name' => $request['name'],
                 'email' => $request['email'],
@@ -118,7 +118,7 @@ class UserController extends Controller
         ]));
 
         // メールを確認して、承認してからログインすることを表示するページへ
-        return redirect('users')->with('info', trans('sentinel.user_regist_done'));
+        return redirect('users')->with('info', trans('sentinel.user_registed'));
     }
 
     /**

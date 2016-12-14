@@ -16,7 +16,7 @@
 
                     @include('parts.errors')
 
-                    <form id="loginForm" class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                    <form id="login-form" class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">

@@ -10,7 +10,7 @@
 
             @if (Sentinel::check()->hasAccess('user.create'))
 
-            <form id="storeUserForm" class="col" role="form" method="POST" action="{{url('users')}}">
+            <form id="store-user-form" class="col" role="form" method="POST" action="{{url('users')}}">
                 {{ csrf_field() }}
 
                 <div class="panel panel-default">

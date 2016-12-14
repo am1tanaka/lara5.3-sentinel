@@ -59,7 +59,7 @@ class UserEntryCest
         $I->wantTo('ユーザー登録');
         $moderator = Sentinel::findRoleBySlug('moderator');
         $I->selectOption('form input[name=user_new_role]', $moderator->name);
-        $I->submitForm('#storeUserForm', $this->cres[2]);
+        $I->submitForm('#store-user-form', $this->cres[2]);
         $I->dontSee(trans('sentinel.permission_denied'), '.alert-danger');
 
         $I->wantTo('cres[2]の登録確認');
