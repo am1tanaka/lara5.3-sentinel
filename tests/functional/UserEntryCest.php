@@ -37,7 +37,7 @@ class UserEntryCest
         // 一般ユーザー
         $I->expect('ユーザー一覧権限なし');
         $I->amOnPage('/login');
-        $I->submitForm('#loginForm', [
+        $I->submitForm('#login-form', [
             'email' => $this->cres[1]['email'],
             'password' => $this->cres[1]['password']
         ]);
@@ -49,7 +49,7 @@ class UserEntryCest
         // 管理者テスト
         $I->expect('ユーザー一覧表示');
         $I->amOnPage('/login');
-        $I->submitForm('#loginForm', [
+        $I->submitForm('#login-form', [
             'email' => $this->cres[0]['email'],
             'password' => $this->cres[0]['password']
         ]);

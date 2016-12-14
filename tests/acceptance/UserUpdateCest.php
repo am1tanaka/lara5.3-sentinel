@@ -32,6 +32,8 @@ class UserUpdateCest
 
     public function _after(AcceptanceTester $I)
     {
+        // データベースを削除
+        Artisan::call('migrate:refresh');
     }
 
     // tests
@@ -39,7 +41,7 @@ class UserUpdateCest
     {
         $I->wantTo('Login');
         $I->amOnPage('/login');
-        $I->submitForm('#loginForm', [
+        $I->submitForm('#login-form', [
             'email' => $this->cres[0]['email'],
             'password' => $this->cres[0]['password']
         ]);
