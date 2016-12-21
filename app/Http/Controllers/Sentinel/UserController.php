@@ -6,9 +6,22 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 use Sentinel;
+use Redirect;
 
 class UserController extends Controller
 {
+    /**
+     * コンストラクター
+     * 処理に権限チェックのミドルウェアを設定
+     */
+    public function __construct() {
+        $this->middleware('permission:user.view', [
+            'only' => [
+                'index'
+            ]
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
