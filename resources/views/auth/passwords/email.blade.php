@@ -14,7 +14,7 @@
                         </div>
                     @endif
 
-                    <form id="sendResetForm" class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
+                    <form id="send-reset-form" class="form-horizontal" role="form" method="POST" action="{{ url('/password/email') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">

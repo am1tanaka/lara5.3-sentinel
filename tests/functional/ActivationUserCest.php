@@ -27,27 +27,27 @@ class ActivationUserCest
     public function tryToTest(FunctionalTester $I)
     {
         // アクティベーションの再送チェック
-        $I->expect('アクティベーションコードの再送');
+        $I->wantTo(' アクティベーションコードの再送.');
         $url = url('register', [base64_encode($this->cre['email'])]);
         $I->amOnPage($url);
         $I->seeInCurrentUrl('/login');
         $I->see(trans('sentinel.after_register'));
 
         // アクティベーションで無効なemail
-        $I->expect('無効なメールアドレスでの要求');
+        $I->wantTo(' 無効なメールアドレスでの要求に対してエラーを確認.');
         $url = url('register', [base64_encode('nobody@test.com')]);
         $I->amOnPage($url);
         $I->seeInCurrentUrl('/login');
         $I->see(trans('sentinel.invalid_activation_params'));
 
         // コード違い
-        $I->expect('アクティベーションコード違いエラー');
+        $I->wantTo(' アクティベーションコード違いエラーの確認.');
         $url = url('activate', [base64_encode($this->cre['email']), 'error']);
         $I->amOnPage($url);
         $I->see(trans('sentinel.invalid_activation_params'), '.alert-danger');
 
         // 成功チェック
-        $I->expect('アクティベーション成功');
+        $I->wantTo(' アクティベーション成功の確認.');
         $url = url('activate', [base64_encode($this->cre['email']), $this->code]);
         // リンクを amOnPage で表示
         $I->amOnPage($url);
@@ -55,20 +55,20 @@ class ActivationUserCest
         $I->see(trans('sentinel.activation_done'));
 
         // すでにアクティベーション済みの場合は、普通にログイン画面へ
-        $I->expect('アクティベーション済みはログイン画面へ');
+        $I->wantTo(' アクティベーション済みはログイン画面へ.');
         $url = url('activate', [base64_encode($this->cre['email']), 'no']);
         $I->amOnPage($url);
         $I->dontSee(trans('sentinel.activation_done'));
         $I->dontSee(trans('sentinel.invalid_activation_params'));
 
         // 失敗チェック
-        $I->expect('アクティベーションメールもアクティベーションコードも違う');
+        $I->wantTo(' アクティベーションメールもアクティベーションコードも違う時の確認.');
         $url = url('activate', [base64_encode('nobody@test.com'), 'no']);
         $I->amOnPage($url);
         $I->see(trans('sentinel.invalid_activation_params'), '.alert-danger');
 
         // アクティベーションの再送チェック
-        $I->expect('アクティベーション済みに対する請求');
+        $I->wantTo(' アクティベーション済みに対する再送を確認.');
         $url = url('register', [base64_encode($this->cre['email'])]);
         $I->amOnPage($url);
         $I->seeInCurrentUrl('/login');

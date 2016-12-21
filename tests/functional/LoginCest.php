@@ -27,7 +27,7 @@ class LoginCest
     public function tryToTest(FunctionalTester $I)
     {
         // 無効なログインテスト
-        $I->expect('未登録ユーザーのログイン失敗');
+        $I->wantTo(' 未登録ユーザーのログイン失敗.');
         $I->amOnPage('/login');
         $I->submitForm('#loginForm', [
             'email' => 'nobody@test.com',
@@ -36,19 +36,20 @@ class LoginCest
         $I->see(trans('sentinel.login_failed'));
 
         // ログインの成功テスト
-        $I->expect('ログインの実行');
+        $I->wantTo(' ログイン動作の確認.');
         $I->amOnPage('/login');
         $I->submitForm('#loginForm', $this->cre);
         $I->seeInCurrentUrl('/home');
 
         // POSTでログアウトテスト
-        $I->expect('ログアウトのテスト');
+        $I->wantTo(' ログアウトの動作確認.');
         $I->amOnPage('/login');
         $I->submitForm('#loginForm', $this->cre);
         $I->submitForm('#logout-form', []);
         $I->seeInCurrentUrl('/login');
 
         // GETでログアウトテスト
+        $I->wantTo(' GETでのログアウトの動作確認.');
         $I->amOnPage('/logout');
         $I->seeInCurrentUrl('/login');
     }
