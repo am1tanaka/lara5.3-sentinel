@@ -29,7 +29,7 @@ class LoginCest
         // 無効なログインテスト
         $I->wantTo(' 未登録ユーザーのログイン失敗.');
         $I->amOnPage('/login');
-        $I->submitForm('#loginForm', [
+        $I->submitForm('#login-form', [
             'email' => 'nobody@test.com',
             'password' => 'notentry'
         ]);
@@ -38,13 +38,13 @@ class LoginCest
         // ログインの成功テスト
         $I->wantTo(' ログイン動作の確認.');
         $I->amOnPage('/login');
-        $I->submitForm('#loginForm', $this->cre);
+        $I->submitForm('#login-form', $this->cre);
         $I->seeInCurrentUrl('/home');
 
         // POSTでログアウトテスト
         $I->wantTo(' ログアウトの動作確認.');
         $I->amOnPage('/login');
-        $I->submitForm('#loginForm', $this->cre);
+        $I->submitForm('#login-form', $this->cre);
         $I->submitForm('#logout-form', []);
         $I->seeInCurrentUrl('/login');
 
