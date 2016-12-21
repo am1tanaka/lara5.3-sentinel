@@ -124,6 +124,11 @@ return [
 
     'log_level' => env('APP_LOG_LEVEL', 'debug'),
 
+    /**
+     * １ページあたりに表示するデータ数
+     */
+    'items_per_page' => 20,
+    
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
