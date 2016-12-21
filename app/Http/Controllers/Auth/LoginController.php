@@ -58,6 +58,9 @@ class LoginController extends Controller
             return view('auth.login')->withErrors([trans('sentinel.login_failed')]);
         }
 
+        // ロールのチェック
+        $this->checkAdminMailRoles($request);
+
         return redirect($this->redirectTo);
     }
 
@@ -68,5 +71,45 @@ class LoginController extends Controller
         Sentinel::logout();
 
         return redirect($this->redirectTo);
+    }
+
+    /**
+     * 管理者のメールアドレスチェックをして、管理者の時で、ロールがない時は、
+     * ロールを整える
+     * @return bool true=作成した / false=何もしない
+     */
+    private function checkAdminMailRoles(Request $request) {
+        if (strcmp($request['email'], config('roles.admin_email')) !== 0) {
+            return false;
+        }
+
+        // ロールがあるかを確認する
+        if (!Sentinel::findRoleBySlug('admin')) {
+            // ロールがないので、作成する
+            $defs = config('roles.default_roles');
+            foreach($defs as $k => $v)
+            {
+                // ロールがなければ作成
+                $role = Sentinel::findRoleByName($defs[$k]['name']);
+                if (!$role) {
+                    Sentinel::getRoleRepository()->createModel()->create($defs[$k]);
+                }
+                else {
+                    // ロールがある場合は、更新
+                    $role->permissions = $defs[$k]['permissions'];
+                    $role->save();
+                }
+            }
+        }
+
+        // 管理者のメール。管理者ロールが割り当てられている場合は何もしない
+        if (Sentinel::inRole('admin')) {
+            return false;
+        }
+
+        // ユーザーにadminロールを設定する
+        $role = Sentinel::findRoleBySlug('admin');
+        $role->users()->attach($this->userInterface);
+        return true;
     }
 }
