@@ -25,6 +25,16 @@ class UserController extends Controller
                 'store'
             ]
         ]);
+        $this->middleware('permission:user.update', [
+            'only' => [
+                'update'
+            ]
+        ]);
+        $this->middleware('permission:user.delete', [
+            'only' => [
+                'destroy'
+            ]
+        ]);
     }
 
     /**
@@ -143,7 +153,50 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // ユーザーを検索
+        $user = Sentinel::findById($id);
+        if (!$user) {
+            // 手動でアクセスした場合はユーザーが見つからない可能性があるので、チェックをしておく
+            return back()->withInput()->withErrors(['user_not_found' => trans('sentinel.user_not_found')]);
+        }
+
+        // 更新したデータがあれば更新する
+        $userid = 'user_'.$id."_";
+        $changed = [];
+        if ((!empty($request[$userid.'name'])) && ($user->name !== $request[$userid.'name'])) {
+            $changed['name_changed'] = $user->name." > ".$request[$userid.'name'];
+            $user->name = $request[$userid.'name'];
+        }
+        if ((!empty($request[$userid.'email'])) && ($user->email !== $request[$userid.'email'])) {
+            $changed['email_changed'] = $user->email." > ".$request[$userid.'email'];
+            $user->email = $request[$userid.'email'];
+        }
+
+        if (count($changed) > 0)
+        {
+            $user->save();
+        }
+
+        // ロールのチェック
+        $nowroles = "";
+        foreach(Sentinel::getRoleRepository()->all() as $role) {
+            $idxinrole = $userid.'role';
+            $inrole = (!empty($request[$idxinrole] && ($request[$idxinrole]===$role->name)));
+            $nowrole = $user->inRole($role->slug);
+            if ($nowrole && !$inrole) {
+                // ロールを外す
+                $changed['role_detach'.$role->id] = $role->name.trans('sentinel.detach_role');
+                $role->users()->detach($user);
+            }
+            else if (!$nowrole && $inrole) {
+                // ロールを設定
+                $changed['role_attach'.$role->id] = $role->name.trans('sentinel.attach_role');
+                $role->users()->attach($user);
+            }
+        }
+
+        // 結果を表示して戻る
+        return back()->withInput()->with(['info' => $changed]);
     }
 
     /**
@@ -154,6 +207,17 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // ユーザーを検索
+        $user = Sentinel::findById($id);
+        if (!$user) {
+            // 手動でアクセスした場合はユーザーが見つからない可能性があるので、チェックをしておく
+            return back()->withInput()->withErrors(['user_not_found' => trans('sentinel.user_not_found')]);
+        }
+
+        // 削除実行
+        $user->delete();
+
+        // 削除完了メッセージを添えて元のページに戻る
+        return back()->with(['info' => trans('sentinel.user_deleted')]);
     }
 }
