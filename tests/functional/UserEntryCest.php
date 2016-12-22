@@ -13,6 +13,10 @@ class UserEntryCest
             'name' => '一般ユーザー',
             'email' => 'user@test.com',
             'password'=>'password'
+        ],
+        [
+            'name' => '追加',
+            'email' => 'add@test.com'
         ]
     ];
 
@@ -54,5 +58,15 @@ class UserEntryCest
         $I->click('ユーザー管理');
         $I->expect(' パーミッションがないメッセージが表示されない.');
         $I->dontSee(trans('sentinel.permission_denied'), '.alert-danger');
+
+        // ユーザー登録処理のテスト
+        $I->wantTo(' ユーザー登録.');
+        $moderator = Sentinel::findRoleBySlug('moderator');
+        $I->selectOption('form input[name=user_new_role]', $moderator->name);
+        $I->submitForm('#store-user-form', $this->cres[2]);
+        $I->dontSee(trans('sentinel.permission_denied'), '.alert-danger');
+
+        $I->expect(' cres[2]のメールアドレスがレコードに見つかる.');
+        $I->seeRecord('users', array('email' => $this->cres[2]['email']));
     }
 }

@@ -25,4 +25,7 @@ return [
     'password_reset_failed' => 'リセットコードが古くなっていました。もう一度、リセットし直してください。',
     // 権限関連
     'permission_denied' => '権限がありません。',
+    // ユーザー登録関連
+    'user_regist_subject' => 'ユーザー登録完了',
+    'user_registered' => 'ユーザーの登録を完了しました。登録情報を管理者メールアドレスに送信しました。',
 ];

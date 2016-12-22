@@ -99,4 +99,6 @@ return [
         ],
     ],
 
+    // 自動生成するパスワードの長さ
+    'password_generate_length' => 8,
 ];
