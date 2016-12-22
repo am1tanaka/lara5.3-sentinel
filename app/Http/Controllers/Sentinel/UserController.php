@@ -47,7 +47,7 @@ class UserController extends Controller
         $user = Sentinel::check();
         if (!!$user) {
             return view('sentinel.users', [
-                'roles' => Sentinel::getRoleRepository()->paginate(config("app.items_per_page")),
+                'roles' => Sentinel::getRoleRepository()->all(),
                 'users' => Sentinel::getUserRepository()->paginate(config("app.items_per_page"))
             ]);
         }

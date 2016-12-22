@@ -37,6 +37,20 @@ return [
                 "role.view" => false,
                 "role.update" => false,
             ]
+        ],
+        "default_user" => [
+            "name" => "User",
+            "slug" => "user",
+            "permissions" => [
+                "user.create" => false,
+                "user.delete" => false,
+                "user.view" => false,
+                "user.update" => false,
+                "role.create" => false,
+                "role.delete" => false,
+                "role.view" => false,
+                "role.update" => false,
+            ]
         ]
     ]
 ];

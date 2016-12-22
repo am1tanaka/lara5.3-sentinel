@@ -72,12 +72,12 @@ class UserUpdateCest
         $I->waitForText('b@email.com', 5);
 
         $I->wantTo(' ロールの変更を確認.');
-        $I->selectOption('form input[name=user_'.$this->userid.'_role]', 'Administrator');
+        $I->selectOption('form input[name=user_'.$this->userid.'_role]', 'User');
         $I->click('#update_user_'.$this->userid);
         $I->waitForElementVisible('.modal-dialog', 5);
         $I->click('はい');
         $I->expect(' ロールが変更されていることを確認.');
-        $I->seeOptionIsSelected('form input[name=user_'.$this->userid.'_role]', 'Administrator');
+        $I->seeOptionIsSelected('form input[name=user_'.$this->userid.'_role]', 'User');
 
         $I->wantTo(' ユーザー削除の動作確認.');
         $I->click('#delete_user_'.$this->userid);
