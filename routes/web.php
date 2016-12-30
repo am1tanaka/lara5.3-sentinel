@@ -43,4 +43,7 @@ Route::resource('users', 'Sentinel\UserController', ['except' => [
     'create'
 ]]);
 
+// ユーザー自身の情報の設定画面を表示
+Route::get('setting', 'Sentinel\SettingController@show');
+
 Route::get('/home', 'HomeController@index');

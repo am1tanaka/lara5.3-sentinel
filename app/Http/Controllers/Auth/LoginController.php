@@ -19,6 +19,11 @@ class LoginController extends Controller
     protected $redirectTo = '/home';
 
     /**
+     * ログアウト後に表示するページ
+     */
+    protected $logoutTo = '/login';
+
+    /**
      * Create a new controller instance.
      *
      * @return void
@@ -70,7 +75,7 @@ class LoginController extends Controller
     protected function logout(Request $request) {
         Sentinel::logout();
 
-        return redirect($this->redirectTo);
+        return redirect($this->logoutTo);
     }
 
     /**
